@@ -7,38 +7,37 @@
 #include <mmsystem.h>
 #include "librarys.h"
 
-/************************ Àü¿ªº¯¼ö ************************/
-char** note;						//³ëÆ®¸¦ À§ÇÑ 2Â÷¿ø ¹è¿­
-int SIZE_OF_NOTE;					//³ëÆ®ÀÇ ±æÀÌ¸¦ ÀúÀå ÇÒ º¯¼ö
-int combo = 0;						//ÄÞº¸¸¦ ÀúÀå ÇÒ º¯¼ö
-int perfect = 0, good = 0, bad = 0;	//ÆÇÁ¤À» ±â·Ï ÇÒ º¯¼ö
+/************************ ì „ì—­ë³€ìˆ˜ ************************/
+char** note;						//ë…¸íŠ¸ë¥¼ ìœ„í•œ 2ì°¨ì› ë°°ì—´
+int SIZE_OF_NOTE;					//ë…¸íŠ¸ì˜ ê¸¸ì´ë¥¼ ì €ìž¥ í•  ë³€ìˆ˜
+int combo = 0;						//ì½¤ë³´ë¥¼ ì €ìž¥ í•  ë³€ìˆ˜
+int perfect = 0, good = 0, bad = 0;	//íŒì •ì„ ê¸°ë¡ í•  ë³€ìˆ˜
 /*********************************************************/
 
-/// °ÔÀÓÀ» ½ÃÀÛÇÏ¸é, ÇÃ·¹ÀÌ¾î´Â °îÀ» ¼±ÅÃÇÏ°í ÀÌ ÇÔ¼ö·Î ³Ñ¾î¿À°Ô µÉ °ÍÀÌ´Ù.
-/// ÀÌ ÇÔ¼ö´Â º» °ÔÀÓÀÇ ¸ÞÀÎ ÇÔ¼öÀÌ´Ù.
+/// ê²Œìž„ì„ ì‹œìž‘í•˜ë©´, í”Œë ˆì´ì–´ëŠ” ê³¡ì„ ì„ íƒí•˜ê³  ì´ í•¨ìˆ˜ë¡œ ë„˜ì–´ì˜¤ê²Œ ë  ê²ƒì´ë‹¤.
+/// ì´ í•¨ìˆ˜ëŠ” ë³¸ ê²Œìž„ì˜ ë©”ì¸ í•¨ìˆ˜ì´ë‹¤.
 
-/// ÀÌ ÇÔ¼ö´Â °ÔÀÓÀ» µ¿ÀÛ½ÃÅ°±â À§ÇØ ´ÙÀ½°ú °°Àº ÀýÂ÷¸¦ °ÅÄ£´Ù.
-/// 1) °ÔÀÓ¿¡ ÇÊ¿äÇÑ º¯¼ö ¹× ¹è¿­µéÀ» ÃÊ±âÈ­ÇÑ´Ù.
-/// 2) ÆÄÀÏ·ÎºÎÅÍ ³ëÆ®¸¦ ºÒ·¯¿Â´Ù.
-/// 3) ¹Ýº¹¹®°ú ¿©·¯°¡Áö ÇÔ¼ö ¹× ±â´ÉÀ» »ç¿ëÇØ °ÔÀÓÀ» µ¿ÀÛ½ÃÅ²´Ù.
-/// 4) °ÔÀÓÀÌ ¸ðµÎ ³¡³ª¸é °á°ú Ã¢ ÇÔ¼ö·Î Á¡ÇÁÇÑ´Ù.
+/// ì´ í•¨ìˆ˜ëŠ” ê²Œìž„ì„ ë™ìž‘ì‹œí‚¤ê¸° ìœ„í•´ ë‹¤ìŒê³¼ ê°™ì€ ì ˆì°¨ë¥¼ ê±°ì¹œë‹¤.
+/// 1) ê²Œìž„ì— í•„ìš”í•œ ë³€ìˆ˜ ë° ë°°ì—´ë“¤ì„ ì´ˆê¸°í™”í•œë‹¤.
+/// 2) íŒŒì¼ë¡œë¶€í„° ë…¸íŠ¸ë¥¼ ë¶ˆëŸ¬ì˜¨ë‹¤.
+/// 3) ë°˜ë³µë¬¸ê³¼ ì—¬ëŸ¬ê°€ì§€ í•¨ìˆ˜ ë° ê¸°ëŠ¥ì„ ì‚¬ìš©í•´ ê²Œìž„ì„ ë™ìž‘ì‹œí‚¨ë‹¤.
+/// 4) ê²Œìž„ì´ ëª¨ë‘ ëë‚˜ë©´ ê²°ê³¼ ì°½ í•¨ìˆ˜ë¡œ ì í”„í•œë‹¤.
 void inGame(int sel) {
-	// Àü °ÔÀÓÀÇ ±â·ÏÀ» ÃÊ±âÈ­
+	int line = 50;	//ì¶œë ¥ ì‹œ ì¤„ ìˆ˜ë¥¼ ê³„ì‚°í•˜ê¸° ìœ„í•œ ë³€ìˆ˜
+	int i, j, k;	// ì œì–´ìš© ë³€ìˆ˜
+	int sync = 103;	// ë…¸ëž˜ì™€ì˜ ì‹±í¬
+	// ì „ ê²Œìž„ì˜ ê¸°ë¡ì„ ì´ˆê¸°í™”
 	perfect = 0;
 	good = 0;
 	bad = 0;
 	combo = 0;
 
-	int line = 50;	//Ãâ·Â ½Ã ÁÙ ¼ö¸¦ °è»êÇÏ±â À§ÇÑ º¯¼ö
-	int i, j, k;	// Á¦¾î¿ë º¯¼ö
-	int sync = 103;	// ³ë·¡¿ÍÀÇ ½ÌÅ©
-
-	//¿øÈ°ÇÑ Ãâ·ÂÀÌ °¡´ÉÇÒ ¸¸Å­ ÄÜ¼Ö Ã¢ÀÌ ³Ð¾îÁø´Ù.
+	//ì›í™œí•œ ì¶œë ¥ì´ ê°€ëŠ¥í•  ë§Œí¼ ì½˜ì†” ì°½ì´ ë„“ì–´ì§„ë‹¤.
 	system("mode con cols=120 lines=60");
 
 	FILE* np = fopen("note.txt", "r");
 	
-	//À¯¿¬ÇÑ µ¿ÀûÇÒ´ç ¹× ¹Ýº¹¹® »ç¿ëÀ» À§ÇØ ³ëÆ®ÀÇ ÁÙ ¼ö¸¦ ±¸ÇÑ´Ù.
+	//ìœ ì—°í•œ ë™ì í• ë‹¹ ë° ë°˜ë³µë¬¸ ì‚¬ìš©ì„ ìœ„í•´ ë…¸íŠ¸ì˜ ì¤„ ìˆ˜ë¥¼ êµ¬í•œë‹¤.
 	SIZE_OF_NOTE = countLine(np); // fileio.c
 
 	note = (char **)malloc(sizeof(char*) * SIZE_OF_NOTE);
@@ -47,34 +46,34 @@ void inGame(int sel) {
 		note[i] = (char *)malloc(sizeof(char) * 4);
 	}
 
-	//³ëÆ®¸¦ »ý¼ºÇÑ´Ù.
+	//ë…¸íŠ¸ë¥¼ ìƒì„±í•œë‹¤.
 	readNote(note, np, SIZE_OF_NOTE);	// fileio.c
 
 	PlaySound(TEXT(taebo), NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
 
-	//´ÙÀ½ ¹Ýº¹¹®Àº ³ëÆ®ÀÇ ±æÀÌ¸¸Å­ °ÔÀÓÀ» µ¿ÀÛ½ÃÅ²´Ù.
+	//ë‹¤ìŒ ë°˜ë³µë¬¸ì€ ë…¸íŠ¸ì˜ ê¸¸ì´ë§Œí¼ ê²Œìž„ì„ ë™ìž‘ì‹œí‚¨ë‹¤.
 	for (i = 0; i < SIZE_OF_NOTE; i++) {
 		makeFrame();
 		gotoxy(0, 0);	
 
-		line = 34;		// Æ²ÀÇ ³¡ = 48¹ø Â° ÁÙ
+		line = 34;		// í‹€ì˜ ë = 48ë²ˆ ì§¸ ì¤„
 		
-		//´ÙÀ½ ¹Ýº¹¹®Àº ³ëÆ®¸¦ È­¸é¿¡ Ãâ·Â½ÃÅ²´Ù.
+		//ë‹¤ìŒ ë°˜ë³µë¬¸ì€ ë…¸íŠ¸ë¥¼ í™”ë©´ì— ì¶œë ¥ì‹œí‚¨ë‹¤.
 		for (j = SIZE_OF_NOTE - 1; j > SIZE_OF_NOTE - 34; j--) {
 			for (k = 0; k < 4; k++) {
 				if (note[j][k] == 1) {
 					printNote(k, line);
 				}
 			}
-			//À­ÁÙ·Î ÇÑ ÁÙ ¿Ã¶ó°£´Ù.
+			//ìœ—ì¤„ë¡œ í•œ ì¤„ ì˜¬ë¼ê°„ë‹¤.
 			line--;
 		}
 		
-		//ÇÃ·¹ÀÌ¾î°¡ Å°¸¦ ´©¸£¸é ¿©±â¼­ Ã³¸®ÇÑ´Ù.
+		//í”Œë ˆì´ì–´ê°€ í‚¤ë¥¼ ëˆ„ë¥´ë©´ ì—¬ê¸°ì„œ ì²˜ë¦¬í•œë‹¤.
 		isHitted(0);
-		Sleep(sync);	//½ÌÅ©¸¸Å­ µô·¹ÀÌ
+		Sleep(sync);	//ì‹±í¬ë§Œí¼ ë”œë ˆì´
 
-		//¹«½ÃµÈ ³ëÆ®´Â °³¸øÇÏ³ë·Î °£ÁÖÇÑ´Ù.
+		//ë¬´ì‹œëœ ë…¸íŠ¸ëŠ” ê°œëª»í•˜ë…¸ë¡œ ê°„ì£¼í•œë‹¤.
 		for (j = 0; j < 4; j++) {
 			if (note[SIZE_OF_NOTE - 1][j] ==  1) {
 				note[SIZE_OF_NOTE - 1][j] = 0;
@@ -82,10 +81,10 @@ void inGame(int sel) {
 			}
 		}
 
-		//´ÙÀ½ ¹Ýº¹¹®Àº ³ëÆ®¸¦ ÇÑ Ä­¾¿ ¾Æ·¡·Î ÀÌµ¿½ÃÅ²´Ù.
+		//ë‹¤ìŒ ë°˜ë³µë¬¸ì€ ë…¸íŠ¸ë¥¼ í•œ ì¹¸ì”© ì•„ëž˜ë¡œ ì´ë™ì‹œí‚¨ë‹¤.
 		for (j = SIZE_OF_NOTE - 1; j >= 0 ; j--) {
 			for (k = 0; k < 4; k++) {
-				// SIZE_OF_NOTE - 1¸¦ ³ëÆ®ÀÇ ³¡À¸·Î »ï´Â´Ù.
+				// SIZE_OF_NOTE - 1ë¥¼ ë…¸íŠ¸ì˜ ëìœ¼ë¡œ ì‚¼ëŠ”ë‹¤.
 				if (j == SIZE_OF_NOTE - 1) {
 					break;
 				}
@@ -96,7 +95,7 @@ void inGame(int sel) {
 			}
 		}
 
-		//Á¤º¸) system("cls")´Â gotoxy(0,0)º¸´Ù ´õ ´À¸®´Ù Ä«´õ¶ó.
+		//ì •ë³´) system("cls")ëŠ” gotoxy(0,0)ë³´ë‹¤ ë” ëŠë¦¬ë‹¤ ì¹´ë”ë¼.
 		gotoxy(0, 0);	
 	}
 
@@ -109,20 +108,20 @@ void inGame(int sel) {
 
 
 // TODO
-// ³ëÆ®°¡ ÆÇÁ¤ ¹üÀ§ ³»¿¡ ÀÖÁö ¾ÊÀ»½Ã¿¡ ÀÔ·ÂÇß´Ù¸é...
-// °¡Àå °¡±îÀÌ ÀÖ´Â ³ëÆ®¸¦ Áö¿ì°í °³¸øÇÏ³ë¸¦ Ãâ·ÂÇÑ´Ù.
+// ë…¸íŠ¸ê°€ íŒì • ë²”ìœ„ ë‚´ì— ìžˆì§€ ì•Šì„ì‹œì— ìž…ë ¥í–ˆë‹¤ë©´...
+// ê°€ìž¥ ê°€ê¹Œì´ ìžˆëŠ” ë…¸íŠ¸ë¥¼ ì§€ìš°ê³  ê°œëª»í•˜ë…¸ë¥¼ ì¶œë ¥í•œë‹¤.
 
-// kbhitÀ» »ç¿ëÇÏ¿© ÀÔ·ÂµÇ¾úÀ»¶§¸¸ ÇÔ¼ö¸¦ ½ÇÇàÇÏ´Â ±â´É¿¡ ´ëÇØ °íÂû
+// kbhitì„ ì‚¬ìš©í•˜ì—¬ ìž…ë ¥ë˜ì—ˆì„ë•Œë§Œ í•¨ìˆ˜ë¥¼ ì‹¤í–‰í•˜ëŠ” ê¸°ëŠ¥ì— ëŒ€í•´ ê³ ì°°
 
-/// ÀÌ ÇÔ¼ö´Â ÇÃ·¹ÀÌ¾î°¡ Å°¸¦ ´­·¶´ÂÁö, ¶Ç ¾î¶² Å°¸¦ ´­·¶´ÂÁö È®ÀÎÇÏ´Â ÇÔ¼öÀÌ´Ù.
-/// ÀÌ ÇÔ¼ö´Â inGame()¿¡¼­ ÁÖ±âÀûÀ¸·Î È£Ãâ µÉ °ÍÀÌ´Ù.
+/// ì´ í•¨ìˆ˜ëŠ” í”Œë ˆì´ì–´ê°€ í‚¤ë¥¼ ëˆŒë €ëŠ”ì§€, ë˜ ì–´ë–¤ í‚¤ë¥¼ ëˆŒë €ëŠ”ì§€ í™•ì¸í•˜ëŠ” í•¨ìˆ˜ì´ë‹¤.
+/// ì´ í•¨ìˆ˜ëŠ” inGame()ì—ì„œ ì£¼ê¸°ì ìœ¼ë¡œ í˜¸ì¶œ ë  ê²ƒì´ë‹¤.
 
-/// ÀÌ ÇÔ¼ö´Â Å°°¡ ´­¸®°Ô µÇ¸é ´ÙÀ½°ú °°Àº ÀÏÀ» ÇÑ´Ù.
-/// 1) f, g, h, j Áß ÇÏ³ªÀÇ Å°¸¦ ÀÔ·Â¹Þ´Â´Ù
-/// 2) ÀÔ·Â¹ÞÀº ¹®ÀÚ¿¡ µû¶ó¼­ ÇØ´çÇÏ´Â ·¹ÀÎ ¹øÈ£¸¦ ÀÎÀÚ·Î ÇÏ¿©±Ý ÆÇÁ¤ ÇÔ¼ö¸¦ È£ÃâÇÑ´Ù.
-/// 3) ÀÌÈÄ ÆÇÁ¤Àº ÆÇÁ¤ ÇÔ¼ö°¡ ÇÒ °ÍÀÌ´Ù.
+/// ì´ í•¨ìˆ˜ëŠ” í‚¤ê°€ ëˆŒë¦¬ê²Œ ë˜ë©´ ë‹¤ìŒê³¼ ê°™ì€ ì¼ì„ í•œë‹¤.
+/// 1) f, g, h, j ì¤‘ í•˜ë‚˜ì˜ í‚¤ë¥¼ ìž…ë ¥ë°›ëŠ”ë‹¤
+/// 2) ìž…ë ¥ë°›ì€ ë¬¸ìžì— ë”°ë¼ì„œ í•´ë‹¹í•˜ëŠ” ë ˆì¸ ë²ˆí˜¸ë¥¼ ì¸ìžë¡œ í•˜ì—¬ê¸ˆ íŒì • í•¨ìˆ˜ë¥¼ í˜¸ì¶œí•œë‹¤.
+/// 3) ì´í›„ íŒì •ì€ íŒì • í•¨ìˆ˜ê°€ í•  ê²ƒì´ë‹¤.
 void isHitted(void *arg) {
-	//¾Ë¸ÂÀº ·¹ÀÎ ¹øÈ£¸¦ ÀÎÀÚ·Î ÇÏ¿© È£ÃâÇÑ´Ù.
+	//ì•Œë§žì€ ë ˆì¸ ë²ˆí˜¸ë¥¼ ì¸ìžë¡œ í•˜ì—¬ í˜¸ì¶œí•œë‹¤.
 	if (GetAsyncKeyState(0x46)) {
 		judge(0);
 	}
@@ -140,36 +139,36 @@ void isHitted(void *arg) {
 	}
 }
 
-/// ÀÌ ÇÔ¼ö´Â ÇØ´çÇÏ´Â ·¹ÀÎ¿¡ ´ëÇØ¼­ ³ëÆ®°¡ ÀûÀýÇÑ Å¸ÀÌ¹Ö¿¡ ´­·È´ÂÁö ÆÇÁ¤ÇÏ´Â ÇÔ¼öÀÌ´Ù.
-/// ÀÌ ÇÔ¼ö´Â isHitted()ÀÇ ½ºÀ§Ä¡ ÄÉÀÌ½º¹®¿¡ ÀÇÇØ¼­ ÀÎÀÚ¸¦ ¹ÞÀ¸¸ç È£ÃâµÈ´Ù.
+/// ì´ í•¨ìˆ˜ëŠ” í•´ë‹¹í•˜ëŠ” ë ˆì¸ì— ëŒ€í•´ì„œ ë…¸íŠ¸ê°€ ì ì ˆí•œ íƒ€ì´ë°ì— ëˆŒë ¸ëŠ”ì§€ íŒì •í•˜ëŠ” í•¨ìˆ˜ì´ë‹¤.
+/// ì´ í•¨ìˆ˜ëŠ” isHitted()ì˜ ìŠ¤ìœ„ì¹˜ ì¼€ì´ìŠ¤ë¬¸ì— ì˜í•´ì„œ ì¸ìžë¥¼ ë°›ìœ¼ë©° í˜¸ì¶œëœë‹¤.
 
-/// ÀÌ ÇÔ¼ö´Â ³ëÆ®¸¦ ÆÇÁ¤ÇÏ±â À§ÇØ ´ÙÀ½°ú °°Àº ÀýÂ÷¸¦ °ÅÄ£´Ù.
-/// 1) SIZE_OF_NOTE - 3ÀÇ À§Ä¡¸¦ PERFECT·Î ÇÏ¿© ±× À§Ä¡ÀÇ +-1 ¸¸Å­À» GOODÀ¸·Î ÆÇÁ¤ÇÑ´Ù.
-/// 2) ¹è¿­ÀÇ ÀûÀýÇÑ À§Ä¡µéÀ» È®ÀÎÇÏ¿© ³ëÆ®°¡ Á¸ÀçÇÏ´ÂÁö È®ÀÎÇÑ´Ù.
-/// 3) ³ëÆ®ÀÇ Á¸Àç ¿©ºÎ¿¡µû¶ó ÇØ´ç ÆÇÁ¤¿¡ ¾Ë¸Â´Â ÄÚµå¸¦ ½ÇÇàÇÏ°í ±â·ÏÇÑ´Ù.
+/// ì´ í•¨ìˆ˜ëŠ” ë…¸íŠ¸ë¥¼ íŒì •í•˜ê¸° ìœ„í•´ ë‹¤ìŒê³¼ ê°™ì€ ì ˆì°¨ë¥¼ ê±°ì¹œë‹¤.
+/// 1) SIZE_OF_NOTE - 3ì˜ ìœ„ì¹˜ë¥¼ PERFECTë¡œ í•˜ì—¬ ê·¸ ìœ„ì¹˜ì˜ +-1 ë§Œí¼ì„ GOODìœ¼ë¡œ íŒì •í•œë‹¤.
+/// 2) ë°°ì—´ì˜ ì ì ˆí•œ ìœ„ì¹˜ë“¤ì„ í™•ì¸í•˜ì—¬ ë…¸íŠ¸ê°€ ì¡´ìž¬í•˜ëŠ”ì§€ í™•ì¸í•œë‹¤.
+/// 3) ë…¸íŠ¸ì˜ ì¡´ìž¬ ì—¬ë¶€ì—ë”°ë¼ í•´ë‹¹ íŒì •ì— ì•Œë§žëŠ” ì½”ë“œë¥¼ ì‹¤í–‰í•˜ê³  ê¸°ë¡í•œë‹¤.
 void judge(int rain) {
 	// PERFECT
 	if (note[SIZE_OF_NOTE - 3][rain] == 1) {
-		//ÆÇÁ¤µÈ ³ëÆ® »èÁ¦
+		//íŒì •ëœ ë…¸íŠ¸ ì‚­ì œ
 		note[SIZE_OF_NOTE - 3][rain] = 0;
 		processPerfect();
 		return;
 	}
 	// GOOD LOW
 	else if (note[SIZE_OF_NOTE - 2][rain] == 1) {
-		//ÆÇÁ¤µÈ ³ëÆ® »èÁ¦
+		//íŒì •ëœ ë…¸íŠ¸ ì‚­ì œ
 		note[SIZE_OF_NOTE - 2][rain] = 0;
 		processGood();
 		return;
 	}
 	// GOOD HIGH
 	else if (note[SIZE_OF_NOTE - 4][rain] == 1) {
-		//ÆÇÁ¤µÈ ³ëÆ® »èÁ¦
+		//íŒì •ëœ ë…¸íŠ¸ ì‚­ì œ
 		note[SIZE_OF_NOTE - 4][rain] = 0;
 		processGood();
 		return;
 	}
-	// °³¸øÇÏ³ë ¤¹
+	// ê°œëª»í•˜ë…¸ ã…‰
 	else {
 		processBad();
 		return;
@@ -177,64 +176,64 @@ void judge(int rain) {
 }
 
 void processPerfect() {
-	//ÆÇÁ¤ Ãâ·Â
+	//íŒì • ì¶œë ¥
 	gotoxy(100, 30);
 	printf("PERFECT!   														");
-	//ÄÞº¸ Ãâ·Â
+	//ì½¤ë³´ ì¶œë ¥
 	printCombo();
-	//ÆÛÆåÆ®¿¡ ±â·Ï
+	//í¼íŽ™íŠ¸ì— ê¸°ë¡
 	perfect++;
 	combo++;
 	return;
 }
 
 void processGood() {
-	//ÆÇÁ¤ Ãâ·Â
+	//íŒì • ì¶œë ¥
 	gotoxy(100, 30);
 	printf("GOOD!                                                          ");
-	//ÄÞº¸ Ãâ·Â
+	//ì½¤ë³´ ì¶œë ¥
 	printCombo();
-	//±Â¿¡ ±â·Ï
+	//êµ¿ì— ê¸°ë¡
 	good++;
 	combo++;
 	return;
 }
 
 void processBad() {
-	//ÆÇÁ¤ Ãâ·Â
+	//íŒì • ì¶œë ¥
 	gotoxy(100, 30);
-	printf("°³¸øÇÏ³ë¤¹       												");
-	//ÄÞº¸ ÃÊ±âÈ­ ¹× Ãâ·Â
+	printf("ê°œëª»í•˜ë…¸ã…‰       												");
+	//ì½¤ë³´ ì´ˆê¸°í™” ë° ì¶œë ¥
 	combo = 0;
 	printCombo();
-	//°³¸øÇÏ³ë¿¡ ±â·Ï
+	//ê°œëª»í•˜ë…¸ì— ê¸°ë¡
 	bad++;
 	return;
 }
 
-/// ÀÌ ÇÔ¼ö´Â ÄÞº¸¸¦ Ãâ·ÂÇÑ´Ù.
+/// ì´ í•¨ìˆ˜ëŠ” ì½¤ë³´ë¥¼ ì¶œë ¥í•œë‹¤.
 void printCombo() {
 	gotoxy(100, 31);
 	printf("COMBO : %d															", combo);
 }
 
-/// ÀÌ ÇÔ¼ö´Â ÀûÀýÇÏ°Ô ¹Ì¸® °è»êµÈ À§Ä¡¿¡ ³ëÆ®¸¦ Ãâ·ÂÇÑ´Ù.
+/// ì´ í•¨ìˆ˜ëŠ” ì ì ˆí•˜ê²Œ ë¯¸ë¦¬ ê³„ì‚°ëœ ìœ„ì¹˜ì— ë…¸íŠ¸ë¥¼ ì¶œë ¥í•œë‹¤.
 void printNote(int x, int y) {
 	gotoxy(x * 11 + 1, y);
-	printf(" ¡Ú¡Ú¡Ú¡Ú¡Ú");
+	printf(" â˜…â˜…â˜…â˜…â˜…");
 }
 
-/// º» ÇÔ¼ö´Â °ÔÀÓÀÇ ±âº» Æ²À» Ãâ·ÂÇÑ´Ù.
+/// ë³¸ í•¨ìˆ˜ëŠ” ê²Œìž„ì˜ ê¸°ë³¸ í‹€ì„ ì¶œë ¥í•œë‹¤.
 void makeFrame() {
 	int i;
-	printf("¦£¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¨¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¨¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¨¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¤  \n");
+	printf("â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”  \n");
 	for (i = 0; i <= 30; i++) {
-		printf("¦¢          ¦¢          ¦¢          ¦¢          ¦¢           \n");
+		printf("â”‚          â”‚          â”‚          â”‚          â”‚           \n");
 	}
-	printf("¦§¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦«¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦«¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦«¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦«¦¡¦¡< PERFECT!	\n");
-	printf("¦¢          ¦¢          ¦¢          ¦¢          ¦¢  				\n");
-	printf("¦¢          ¦¢          ¦¢          ¦¢          ¦¢				\n");
-	printf("¦¦¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦ª¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦ª¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦ª¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¥  			    \n");
+	printf("â”œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¼â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¼â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¼â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¼â”€â”€< PERFECT!	\n");
+	printf("â”‚          â”‚          â”‚          â”‚          â”‚  				\n");
+	printf("â”‚          â”‚          â”‚          â”‚          â”‚				\n");
+	printf("â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”´â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”´â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”´â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜  			    \n");
 	printf("     F          G          H          J     \n                ");
 	printf("                                                              ");
 }
