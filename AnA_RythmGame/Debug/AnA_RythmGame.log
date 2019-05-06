@@ -1,0 +1,5 @@
+﻿E:\Microsoft Visual Studio 2019\MSBuild\Microsoft\VC\v160\Microsoft.CppBuild.targets(411,5): warning MSB8028: 중간 디렉터리(Debug\)에 다른 프로젝트(AnA_RythmGame.vcxproj)에서 공유하는 파일이 포함되어 있습니다.  이로 인해 잘못된 정리 및 다시 빌드 동작이 수행될 수 있습니다.
+  inGame.c
+N:\Backup\AnA\AnA_RythmGame\AnA_RythmGame\inGame.c(103): warning C4047: '함수': 'DWORD'의 간접 참조 수준이 'void *'과(와) 다릅니다.
+N:\Backup\AnA\AnA_RythmGame\AnA_RythmGame\inGame.c(103): warning C4024: 'PlaySoundA': 형식 및 실제 매개 변수 3의 형식이 서로 다릅니다.
+  AnA_RythmGame.vcxproj -> N:\Backup\AnA\AnA_RythmGame\Debug\AnA_RhythmGame.exe
