@@ -2,7 +2,6 @@
 #pragma comment(lib, "winmm.lib")
 #include <stdio.h>
 #include <Windows.h>
-#include <process.h>
 #include <conio.h>
 #include <mmsystem.h>
 #include "librarys.h"
